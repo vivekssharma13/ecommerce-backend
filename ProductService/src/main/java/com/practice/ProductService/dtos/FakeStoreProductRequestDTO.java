@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProductResponseDTO {
-    private long id;
-    private String name;
-    private String description;
+public class FakeStoreProductRequestDTO {
+    private int id;
+    private String title;
     private double price;
-    private String imageUrl;
+    private String description;
     private String category;
+    private String image;
 }

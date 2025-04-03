@@ -1,22 +1,46 @@
 package com.practice.ProductService.controller;
-
+import com.practice.ProductService.Services.ProductService;
 import com.practice.ProductService.dtos.ProductResponseDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.practice.ProductService.models.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
+@RequestMapping(path = "/products")
 public class ProductController {
 
-    @GetMapping(path = "/")
-    public ProductResponseDTO getProductById()
+    @Autowired
+    @Qualifier("fakeProductService")
+    ProductService productService;
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable int id)
     {
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setCategory("Test Category");
-        responseDTO.setId("ASJSGDT123");
-        responseDTO.setName("Test Product");
-        responseDTO.setPrice(200.14);
-        responseDTO.setDescription("Test Description");
-        responseDTO.setImageUrl("https://example.com/image.jpg");
-        return responseDTO;
+        ProductResponseDTO responseDTO = productService.getProductById(id).productResponseDTO();
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+    @GetMapping(path = "")
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts()
+    {
+        List<Product> allProducts = productService.getAllProducts();
+        List<ProductResponseDTO> responseDTOs = new ArrayList<>();
+        allProducts.forEach(product -> {
+            responseDTOs.add(product.productResponseDTO());
+        });
+        return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
+    }
+    @PostMapping(path = "/add")
+    public ResponseEntity<ProductResponseDTO> postProduct(Product product)
+    {
+        Product productAdded = productService.addProduct(product.getName(), product.getDescription(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
+        return new ResponseEntity<>(productAdded.productResponseDTO(), HttpStatus.CREATED);
+    }
+
 }
