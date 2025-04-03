@@ -1,5 +1,6 @@
 package com.practice.ProductService.controller;
 import com.practice.ProductService.Services.ProductService;
+import com.practice.ProductService.dtos.ErrorDTO;
 import com.practice.ProductService.dtos.ProductResponseDTO;
 import com.practice.ProductService.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,14 @@ public class ProductController {
     {
         Product productAdded = productService.addProduct(product.getName(), product.getDescription(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
         return new ResponseEntity<>(productAdded.productResponseDTO(), HttpStatus.CREATED);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ErrorDTO nullPointerExceptionHandler(){
+        return ErrorDTO.builder()
+                .message("Null Pointer Exception")
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .build();
     }
 
 }
