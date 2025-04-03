@@ -37,22 +37,16 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public Product addProduct(String name, String description, double price, String imageUrl, String category) {
-        try {
-            FakeStoreProductRequestDTO requestDTO = FakeStoreProductRequestDTO.builder()
-                    .title(name)
-                    .description(description)
-                    .price(price)
-                    .image(imageUrl)
-                    .category(category)
-                    .build();
-            String url = "https://fakestoreapi.com/products";
-            FakeStoreProductDTO fakeStoreProductDTO = restTemplate.postForObject(url, requestDTO, FakeStoreProductDTO.class);
-            System.out.println(fakeStoreProductDTO.toString());
-            return fakeStoreProductDTO.toProduct();
-        }catch (Exception e){
-            System.out.println("Error in adding product"+ e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
+        FakeStoreProductRequestDTO requestDTO = FakeStoreProductRequestDTO.builder()
+                .title(name)
+                .description(description)
+                .price(price)
+                .image(imageUrl)
+                .category(category)
+                .build();
+        String url = "https://fakestoreapi.com/products";
+        FakeStoreProductDTO fakeStoreProductDTO = restTemplate.postForObject(url, requestDTO, FakeStoreProductDTO.class);
+        System.out.println(fakeStoreProductDTO.toString());
+        return fakeStoreProductDTO.toProduct();
     }
 }

@@ -1,5 +1,6 @@
 package com.practice.ProductService.controller;
 import com.practice.ProductService.Services.ProductService;
+import com.practice.ProductService.dtos.AddProductDTO;
 import com.practice.ProductService.dtos.ProductResponseDTO;
 import com.practice.ProductService.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,11 @@ public class ProductController {
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
     @PostMapping(path = "/add")
-    public ResponseEntity<ProductResponseDTO> postProduct(Product product)
+    public ResponseEntity<ProductResponseDTO> postProduct(@RequestBody AddProductDTO product)
     {
-        Product productAdded = productService.addProduct(product.getName(), product.getDescription(), product.getPrice(), product.getImageUrl(), product.getCategory().getName());
+        Product productAdded = productService.addProduct(product.getName(), product.getDescription(), product.getPrice(), product.getImageUrl(), product.getCategory());
         return new ResponseEntity<>(productAdded.productResponseDTO(), HttpStatus.CREATED);
     }
+
 
 }
